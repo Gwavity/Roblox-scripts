@@ -36,7 +36,7 @@ local function superSpeed()
 end
 
 local function removeJumpDelay()
-    for k,v in pairs(getsenv(game:GetService("Players").Thissole58.PlayerGui.ClientModel.Jumping)) do
+    for k,v in pairs(getsenv(ply.PlayerGui.ClientModel.Jumping)) do
         if type(v) == 'function' then
             debug.setupvalue(v,1,true)
         end
