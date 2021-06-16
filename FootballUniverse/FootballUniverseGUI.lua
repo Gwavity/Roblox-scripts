@@ -30,8 +30,8 @@ end
 local function superSpeed()
     local antispeedhack = ply.PlayerGui.ClientModel:FindFirstChild("AntiSpeedHackV3")
     if antispeedhack then antispeedhack:Destroy(); print("AntiSpeedHack Removed.") end
-    if ply.Character.Humanoid.WalkSpeed ~= 35 then
-        ply.Character.Humanoid.WalkSpeed = 35
+    if ply.Character.Humanoid.WalkSpeed ~= 45 then
+        ply.Character.Humanoid.WalkSpeed = 45
     end
 end
 
