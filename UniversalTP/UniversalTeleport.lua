@@ -205,9 +205,8 @@ end
 
 --Scripts:
 
-local function MHGILO_fake_script() -- Teleport.Teleport_Script 
+local function teleportButton() -- Teleport.Teleport_Script 
 	local script = Instance.new('LocalScript', Teleport)
-	
 	local button = script.Parent
 	
 	button.Activated:Connect(function()
@@ -215,13 +214,11 @@ local function MHGILO_fake_script() -- Teleport.Teleport_Script
 			player.Character.HumanoidRootPart.CFrame = CFrame.new(selectedButton[3])
 		end
 	end)
-	
 end
-coroutine.wrap(MHGILO_fake_script)()
+coroutine.wrap(teleportButton)()
 
-local function FVYQ_fake_script() -- OpenList.Open_Script 
+local function openList() -- OpenList.Open_Script 
 	local script = Instance.new('LocalScript', OpenList)
-
 	local button = script.Parent
 	local menu = button.Parent.Locations
 	local currentButton 
@@ -274,11 +271,10 @@ local function FVYQ_fake_script() -- OpenList.Open_Script
 	end)
 	
 end
-coroutine.wrap(FVYQ_fake_script)()
+coroutine.wrap(openList)()
 
-local function WJURIZ_fake_script() -- DeleteLocation.Delete_Script 
+local function deleteLocation() -- DeleteLocation.Delete_Script 
 	local script = Instance.new('LocalScript', DeleteLocation)
-
 	local button = script.Parent
 
 	button.Activated:Connect(function()
@@ -294,6 +290,7 @@ local function WJURIZ_fake_script() -- DeleteLocation.Delete_Script
 			end
 			writefile("SavedPositions.json",httpService:JSONEncode(posTable))
 		end
+			
 		for k,v in pairs(posTable[gamePlace]) do
 			increment = increment + 1
 		end
@@ -302,13 +299,11 @@ local function WJURIZ_fake_script() -- DeleteLocation.Delete_Script
 			writefile("SavedPositions.json",httpService:JSONEncode(posTable))
 		end
 	end)
-	
 end
-coroutine.wrap(WJURIZ_fake_script)()
+coroutine.wrap(deleteLocation)()
 
-local function MQDIT_fake_script() -- SavePosition.Save_Script 
+local function savePosition() -- SavePosition.Save_Script 
 	local script = Instance.new('LocalScript', SavePosition)
-
 	local button = script.Parent
 	local originalText = button.Text
 	local posBox = PositionBox
@@ -357,11 +352,10 @@ local function MQDIT_fake_script() -- SavePosition.Save_Script
 	end)
 	
 end
-coroutine.wrap(MQDIT_fake_script)()
+coroutine.wrap(savePosition)()
 
-local function WJOROTY_fake_script() -- X.X_Script 
+local function closeMenu() -- X.X_Script 
 	local script = Instance.new('LocalScript', X)
-
 	local button = script.Parent
 	local main = button.Parent.Parent
 	
@@ -370,13 +364,11 @@ local function WJOROTY_fake_script() -- X.X_Script
 	end)
 	
 end
-coroutine.wrap(WJOROTY_fake_script)()
+coroutine.wrap(closeMenu)()
 
-local function QZAMATY_fake_script() -- MainBar.Bar Script 
+local function dragMenu() -- MainBar.Bar Script 
 	local script = Instance.new('LocalScript', MainBar)
-
 	local UIS = game:GetService("UserInputService")
-	
 	local barFrame = script	.Parent
 	local held = false
 	local dragStart
@@ -411,11 +403,10 @@ local function QZAMATY_fake_script() -- MainBar.Bar Script
 		end
 	end)
 end
-coroutine.wrap(QZAMATY_fake_script)()
+coroutine.wrap(dragMenu)()
 
-local function ENTM_fake_script() -- Open_Menu.Open_Menu_Script 
+local function openMenu() -- Open_Menu.Open_Menu_Script 
 	local script = Instance.new('LocalScript', Open_Menu)
-
 	local button = script.Parent
 	local main = button.Parent.Parent:FindFirstChild("Main")
 	
@@ -423,4 +414,4 @@ local function ENTM_fake_script() -- Open_Menu.Open_Menu_Script
 		main.Visible = true
 	end)
 end
-coroutine.wrap(ENTM_fake_script)()
+coroutine.wrap(openMenu)()
