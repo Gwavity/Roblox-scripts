@@ -224,6 +224,7 @@ local function openList() -- OpenList.Open_Script
 	local currentButton 
 
 	button.MouseButton1Click:Connect(function()
+	--selectedButton = {button created, text that is supplied to the button, the vector related to the button}
 		if not scrollOpen then-- Max options with these settings is 54
 			local yPos = 0.002
 			local JSONFile = readfile("SavedPositions.json")
@@ -278,6 +279,7 @@ local function deleteLocation() -- DeleteLocation.Delete_Script
 	local button = script.Parent
 
 	button.Activated:Connect(function()
+	--selectedButton = {button created, text that is supplied to the button, the vector related to the button}
 		local increment = 0
 		if selectedButton then
 			posTable[gamePlace][selectedButton[2]] = nil
@@ -327,6 +329,7 @@ local function savePosition() -- SavePosition.Save_Script
 	end
 
 	button.Activated:Connect(function()
+	--selectedButton = {button created, text that is supplied to the button, the vector related to the button}
 		if #posBox.Text < 1 then
 			button.Text = "Please enter a name for your position"
 			currentTime = os.time()
