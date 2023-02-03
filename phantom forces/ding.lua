@@ -769,7 +769,6 @@ end)
 local TeleportService = game:GetService("TeleportService")
 local data = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Dsc&limit=100")).data
 
--- just to remove some servers roblox likely yeeted but still in their cache
 local c = 0
 for i = 1, #data do
     local server = data[i-c]
@@ -791,8 +790,6 @@ end
 
 data = fyshuffle(data)
 
--- this is a horrible, idea, never do what I did here
--- horrible use-case for recursion...
 local function randomhop(data, failed)
     failed = failed or {}
     for _, s in pairs(data) do
@@ -836,16 +833,34 @@ Misc:AddToggle({
 })
 
 
+-- Misc:AddToggle({
+--     Name = "Walkspeed",
+--     Default = false,
+--     Callback = function(Value)
+--         if Value then
+--             while true do 
+--                 wait()
+--                 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 100
+--             end
+--         end
+--     end
+-- })
+
+local onrejoin 
 Misc:AddToggle({
-    Name = "Walkspeed",
+    Name = "Auto Rejoin",
     Default = false,
     Callback = function(Value)
-        if Value then
-            while true do 
-                wait()
-                game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 100
+        local overlay = game:GetService("CoreGui"):FindFirstChild("RobloxPromptGui"):FindFirstChild("promptOverlay")
+        onrejoin = overlay.DescendantAdded:Connect(function(obj)
+            if obj.Name == "ErrorMessage" then
+                obj:GetPropertyChangedSignal("Text"):Connect(function()
+                    if obj.Text:find("votekicked") and Value then
+                        randomhop(data)
+                    end
+                end)
             end
-        end
+        end)
     end
 })
 
