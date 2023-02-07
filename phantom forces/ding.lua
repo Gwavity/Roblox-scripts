@@ -832,20 +832,6 @@ Misc:AddToggle({
     end
 })
 
-
--- Misc:AddToggle({
---     Name = "Walkspeed",
---     Default = false,
---     Callback = function(Value)
---         if Value then
---             while true do 
---                 wait()
---                 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 100
---             end
---         end
---     end
--- })
-
 local onrejoin 
 Misc:AddToggle({
     Name = "Auto Rejoin",
@@ -861,6 +847,147 @@ Misc:AddToggle({
                 end)
             end
         end)
+    end
+})
+
+Misc:AddTextbox({
+    Name = "Join Server ID",
+    Default = "",
+    TextDisappear = false,
+    Callback = function(Value)
+        TeleportService:TeleportToPlaceInstance(game.PlaceId, Value)
+    end
+})
+
+Misc:AddButton({
+    Name = "Copy Server ID",
+    Callback = function()
+        setclipboard(game.JobId)
+    end
+})
+
+Misc:AddButton({
+    Name = "Remove Animations",
+    Callback = function()
+        syn.run_on_actor(getactors()[1], [[
+            --Init
+            if getgenv().connections and getgenv().connections["update"] then getgenv().connections["update"]:Disconnect() else getgenv().connections = {} end
+            
+            local Player = game:GetService("Players").LocalPlayer
+            local Camera = game:GetService("Workspace").CurrentCamera
+            local RunService = game:GetService("RunService")
+            
+            local require = getrenv().shared.require
+            assert(require, "Missing shared.require")
+            
+            local network = require("network")
+            local WeaponControllerInterface = require("WeaponControllerInterface")
+            local MainCameraObject = require("MainCameraObject")
+            local ReplicationObject = require("ReplicationObject")
+            local ThirdPersonObject = require("ThirdPersonObject")
+            local CharacterInterface = require("CharacterInterface")
+            local PlayerDataStoreClient = require("PlayerDataStoreClient")
+            local ContentDatabase = require("ContentDatabase")
+            local GameGlock = require("GameClock")
+            local ActiveLoadoutUtils = require("ActiveLoadoutUtils")
+            
+            assert(network, "Missing network")
+            assert(WeaponControllerInterface, "Missing WeaponControllerInterface")
+            assert(MainCameraObject, "Missing MainCameraObject")
+            assert(ReplicationObject, "Missing ReplicationObject")
+            assert(ThirdPersonObject, "Missing ThirdPersonObject")
+            assert(CharacterInterface, "Missing CharacterInterface")
+            assert(PlayerDataStoreClient, "Missing PlayerDataStoreClient")
+            assert(ContentDatabase, "Missing ContentDatabase")
+            assert(GameGlock, "Missing GameGlock")
+            assert(ActiveLoadoutUtils, "Missing ActiveLoadoutUtils")
+            
+            local oldSetSway = MainCameraObject.setSway
+            local oldShake = MainCameraObject.shake
+            local oldSend = network.send
+            local oldNewIndex
+            
+            local fakeRepObject = nil
+            local controller = nil
+            
+            --Functions
+            
+            local function getActiveWeapon()
+                if controller then
+                    return controller.getActiveWeapon(controller)
+                end
+            end 
+            local function getCurrentWeaponRegistry()
+                if controller then
+                    return controller._activeWeaponRegistry
+                end
+            end
+            local function getWeaponData(Registry)
+                if Registry._weaponData then
+                    return Registry._weaponData
+                end
+            end
+            
+            --Gun Mods / Update
+            
+            getgenv().connections["update"] = RunService.RenderStepped:Connect(function()
+                controller = WeaponControllerInterface.getController()
+                if not controller then return end
+                local registries = getCurrentWeaponRegistry()
+            
+                --Gun Mods
+                for _,registry in pairs(registries) do
+                    local weaponData = getWeaponData(registry)
+                    setreadonly(weaponData, false)
+            
+                    --Instant Equip
+                    if weaponData.equipspeed then weaponData.equipspeed = tick() end
+            
+                    --Instant Reload
+                    if weaponData.animations then
+                        for _,anim in pairs(weaponData.animations) do
+                            if typeof(anim) == "table" then
+                                if string.find(string.lower(_), "reload") then
+                                    anim.timescale = 0
+                                end
+                            end
+                        end
+                    end
+            
+                    --Automatic Weapon
+                    if weaponData.firemodes then weaponData.firemodes = { true } end
+            
+                    --No Recoil / No Spread
+                    if weaponData.camkickmax then
+                        local nvec = Vector3.new()
+                        weaponData.camkickmin = nvec
+                        weaponData.camkickmax = nvec
+                        weaponData.aimcamkickmin = nvec
+                        weaponData.aimcamkickmax = nvec
+                        weaponData.aimtranskickmin = nvec
+                        weaponData.aimtranskickmax = nvec
+                        weaponData.transkickmin = nvec
+                        weaponData.transkickmax = nvec
+                        weaponData.rotkickmin = nvec
+                        weaponData.rotkickmax = nvec
+                        weaponData.aimrotkickmin = nvec
+                        weaponData.aimrotkickmax = nvec
+            
+                        weaponData.hipfirespreadrecover = 100
+                        weaponData.hipfirespread = 0
+                        weaponData.hipfirestability = 0
+                    end
+                    setreadonly(weaponData, true)
+                end
+            end)
+            
+            MainCameraObject.setSway = function(self, a)
+                return oldSetSway(self, 0)
+            end
+            MainCameraObject.shake = function(self, a)
+                return oldShake(self, Vector3.zero)
+            end
+        ]])
     end
 })
 
