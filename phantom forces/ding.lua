@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Swindle315/dahub/main/MainFrame')))()
-local Window = OrionLib:MakeWindow({Name = "Name = "Head$hot | Phantom Forces ",IntroText = "Head$hot"})
+local Window = OrionLib:MakeWindow({Name = "Head$hot | Phantom Forces ",IntroText = "Head$hot"})
 local rs = game:GetService("RunService")
 local tweenService = game:GetService("TweenService")
 
@@ -769,6 +769,7 @@ end)
 local TeleportService = game:GetService("TeleportService")
 local data = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Dsc&limit=100")).data
 
+-- just to remove some servers roblox likely yeeted but still in their cache
 local c = 0
 for i = 1, #data do
     local server = data[i-c]
@@ -790,6 +791,8 @@ end
 
 data = fyshuffle(data)
 
+-- this is a horrible, idea, never do what I did here
+-- horrible use-case for recursion...
 local function randomhop(data, failed)
     failed = failed or {}
     for _, s in pairs(data) do
@@ -808,7 +811,6 @@ local function randomhop(data, failed)
         end
     end
 end
-
 
 local Misc = Window:MakeTab({
 	Name = "Misc",
@@ -832,7 +834,7 @@ Misc:AddToggle({
     end
 })
 
-local onrejoin 
+local onrejoin
 Misc:AddToggle({
     Name = "Auto Rejoin",
     Default = false,
@@ -993,7 +995,7 @@ Misc:AddButton({
 
 Misc:AddButton({
     Name = "Server Hop",
-    Callback = function(Value)
+    Callback = function()
         randomhop(data)
     end
 })
