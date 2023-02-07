@@ -1,4 +1,4 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Swindle315/dahub/main/MainFrame')))()
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/Swindle315/dahub/main/MainFrame'))()
 local Window = OrionLib:MakeWindow({Name = "Head$hot | Phantom Forces ",IntroText = "Head$hot"})
 local rs = game:GetService("RunService")
 local tweenService = game:GetService("TweenService")
