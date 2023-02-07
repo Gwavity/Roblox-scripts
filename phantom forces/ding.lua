@@ -531,13 +531,13 @@ ESP:AddToggle({
                 end
             end
             if not active then
-                table.clear(workspaceParts)
                 break
             end
         end
         for k,v in pairs(workspaceParts) do
             v.Transparency = 0
         end
+	table.clear(workspaceParts)
     end
 })
 
