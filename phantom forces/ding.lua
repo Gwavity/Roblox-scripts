@@ -1,4 +1,4 @@
-local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/Swindle315/dahub/main/MainFrame'))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Swindle315/dahub/main/MainFrame')))()
 local Window = OrionLib:MakeWindow({Name = "Head$hot | Phantom Forces ",IntroText = "Head$hot"})
 local rs = game:GetService("RunService")
 local tweenService = game:GetService("TweenService")
@@ -510,6 +510,7 @@ ESP:AddToggle({
 
 local xrayTrans = 0
 local active = false
+local workspaceParts = {}
 
 ESP:AddToggle({
     Name = "Xray",
@@ -518,19 +519,24 @@ ESP:AddToggle({
         active = Value
         while Value do
             wait()
-            for _,v in pairs(Workspace:GetDescendants()) do
-                if v:IsA("BasePart") and not v.Parent:FindFirstChild("Humanoid") then
+            if #workspaceParts <= 1 then
+                for _,v in pairs(workspace:GetDescendants()) do
+                    if v:IsA("BasePart") and not v.Parent:FindFirstChild("Humanoid") and not v.Parent.Parent:FindFirstChild("Humanoid") then
+                        workspaceParts[#workspaceParts + 1] = v
+                    end
+                end
+            else
+                for k,v in pairs(workspaceParts) do
                     v.Transparency = xrayTrans
                 end
             end
-            if active then
+            if not active then
+                table.clear(workspaceParts)
                 break
             end
         end
-        for _,v in pairs(Workspace:GetDescendants()) do
-            if v:IsA("BasePart") and not v.Parent:FindFirstChild("Humanoid") then
-                v.Transparency = 0
-            end
+        for k,v in pairs(workspaceParts) do
+            v.Transparency = 0
         end
     end
 })
@@ -541,7 +547,7 @@ ESP:AddSlider({
 	Max = 0.9,
 	Default = 0.1,
 	Color = Color3.new(0,0,0),
-	Increment = 0.1,
+	Increment = 0.05,
 	ValueName = "Transparency",
 	Callback = function(Value)
 		xrayTrans = Value
